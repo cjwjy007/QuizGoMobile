@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Lobby from '@/components/Lobby'
-import Room from '@/components/Room'
-import UserInput from '@/components/UserInput'
+import Lobby from '../components/Lobby.vue'
+import Room from '../components/Room.vue'
+import UserInput from '../components/UserInput.vue'
 
 Vue.use(Router)
 
