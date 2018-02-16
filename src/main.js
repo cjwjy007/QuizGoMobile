@@ -3,13 +3,28 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
+import VueSocketio from 'vue-socket.io';
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+import {baseURL} from './baseURL'
 
+Vue.use(VueSocketio, baseURL);
+Vue.use(MintUI)
 Vue.config.productionTip = false
+
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  store,
+  components: {App},
+  template: '<App/>',
+  beforeCreate() {
+    this.$store.dispatch('cookieLogin');
+    if (this.$store.state.auth.username === '') {
+      this.$router.push({name: 'UserInput'})
+    }
+  }
 })
