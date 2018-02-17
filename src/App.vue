@@ -5,12 +5,16 @@
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+  export default {
+    name: 'App'
+  }
 </script>
 
 <style>
-#app {
-}
+  #app {
+  }
+
+  .page-body {
+    padding: 1%;
+  }
 </style>

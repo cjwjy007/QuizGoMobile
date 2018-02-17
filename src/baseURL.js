@@ -1,2 +1,4 @@
-// export const baseURL = "http://117.24.39.96:9577"
-export const baseURL = "http://127.0.0.1:9577"
+// deployment
+export const baseURL = "http://101.132.109.3:9577"
+// test
+// export const baseURL = "http://localhost:9577"

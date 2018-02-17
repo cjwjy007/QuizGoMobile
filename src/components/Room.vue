@@ -6,53 +6,62 @@
       </router-link>
       <mt-button icon="more" slot="right"></mt-button>
     </mt-header>
-    <div class="user-card-set">
-      <div class="user-card" v-for="client in clients">
-        <div v-if="!isGameStart">
-          <sup class="user-card-badge" v-if="client.owner">
-            <mt-badge type="primary">房主</mt-badge>
-          </sup>
-          <sup class="user-card-badge" v-if="!client.owner && client.ready">
-            <mt-badge type="primary">已准备</mt-badge>
-          </sup>
-        </div>
-        <div v-else>
-          <sup class="user-card-badge">
-            <mt-badge type="primary">{{client.score}}</mt-badge>
-          </sup>
-        </div>
-        <img :src="client.avatar">
-        <div>{{client.username}}</div>
-      </div>
-    </div>
-    <div v-if="!isGameStart">
-      <div v-if='isOwner' style="margin-top: 5%">
-        <mt-button type="primary" size="large" @click="startGame">开始游戏</mt-button>
-      </div>
-      <div v-else style="margin-top: 5%">
-        <mt-button type="primary" size="large" @click="readyGame">
-          <div v-if="isReady">
-            已准备
+    <div class="page-body">
+      <div class="user-card-set">
+        <div class="user-card" v-for="client in clients">
+          <div v-if="!isGameStart">
+            <sup class="user-card-badge" v-if="client.owner">
+              <mt-badge type="primary">房主</mt-badge>
+            </sup>
+            <sup class="user-card-badge" v-if="!client.owner && client.ready">
+              <mt-badge type="primary">已准备</mt-badge>
+            </sup>
           </div>
           <div v-else>
-            准备
+            <sup class="user-card-badge">
+              <mt-badge type="primary">{{client.score}}</mt-badge>
+            </sup>
           </div>
-        </mt-button>
+          <img :src="client.avatar">
+          <div>{{client.username}}</div>
+        </div>
       </div>
-    </div>
-    <div class="game">
-      <div class="msg-box" id="msg-box">
+      <div v-if="!isGameStart">
+        <div v-if='isOwner' class="game-button-div">
+          <mt-button type="primary" size="large" @click="startGame">开始游戏</mt-button>
+        </div>
+        <div v-else class="game-button-div">
+          <mt-button type="primary" size="large" @click="readyGame">
+            <div v-if="isReady">
+              已准备
+            </div>
+            <div v-else>
+              准备
+            </div>
+          </mt-button>
+        </div>
+      </div>
+      <div v-else>
+        <div class="game-button-div">
+          <mt-button type="primary" size="large">游戏中</mt-button>
+        </div>
+      </div>
+      <div class="game">
+        <div class="msg-box" id="msg-box">
           <span v-for="content in contents">
             {{content}}
             <br>
           </span>
-      </div>
-      <form class="msg-send" @submit.prevent="">
-        <input placeholder="请输入内容" v-model="msg">
-        <div class="msg-send-button">
-          <mt-button type="primary" @click="sendMsg">发送</mt-button>
         </div>
-      </form>
+        <div class="msg-send">
+          <form class="msg-send-form" @submit.prevent="">
+            <input placeholder="请输入内容" v-model="msg">
+            <div class="msg-send-button">
+              <mt-button type="primary" @click="sendMsg">发送</mt-button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <mt-popup class="question-board"
               v-model="gameBoardVisible"
@@ -263,7 +272,6 @@
     border-radius: 4px;
     border: 1px solid #ebeef5;
     padding: 3%;
-    margin: 5px;
   }
 
   .user-card-set .user-card {
@@ -287,8 +295,23 @@
     height: 100%;
   }
 
-  .game .msg-send {
+  .game-button-div {
+    margin-top: 2%;
+  }
+
+  .game {
     position: absolute;
+    bottom: 1%;
+    right: 1%;
+    left: 1%;
+  }
+
+  .game .msg-send {
+
+  }
+
+  .game .msg-send .msg-send-form {
+    position: relative;
     line-height: normal;
     display: inline-table;
     width: 100%;
@@ -304,12 +327,12 @@
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ebeef5;
-    margin: 5px;
+    margin: 5px 0;
     bottom: 40px;
     top: 260px;
   }
 
-  .game .msg-send input {
+  .game .msg-send .msg-send-form input {
     -webkit-appearance: none;
     background-color: #fff;
     background-image: none;
@@ -328,15 +351,17 @@
     margin-right: 5px;
   }
 
-  .game .msg-send .msg-send-button {
+  .game .msg-send .msg-send-form .msg-send-button {
     vertical-align: middle;
     display: table-cell;
     position: relative;
     white-space: nowrap;
+    padding-left: 1%;
   }
 
-  .game .msg-send .msg-send-button button {
+  .game .msg-send .msg-send-form .msg-send-button button {
     width: 100%;
+    height: 40px;
   }
 
   .question-board {
