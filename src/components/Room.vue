@@ -320,7 +320,7 @@
   }
 
   .game .msg-box {
-    height: 250px;
+    height: 160px;
     width: -webkit-fill-available;;
     overflow-y: auto;
     word-wrap: break-word;
