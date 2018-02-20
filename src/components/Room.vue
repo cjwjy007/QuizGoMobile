@@ -18,7 +18,7 @@
             </sup>
           </div>
           <div v-else>
-            <sup class="user-card-badge" v-if="client.score !== 0">
+            <sup class="user-card-badge" v-if="client.score && client.score!== 0">
               <mt-badge type="primary">{{client.score}}</mt-badge>
             </sup>
           </div>
