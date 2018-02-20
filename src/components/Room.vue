@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mt-header title="quiz">
+    <mt-header title="答题游戏">
       <router-link to="/" slot="left">
         <mt-button icon="back">返回</mt-button>
       </router-link>
@@ -23,7 +23,7 @@
             </sup>
           </div>
           <img :src="client.avatar">
-          <div>{{client.username}}</div>
+          <div class="user-card-name">{{client.username}}</div>
         </div>
       </div>
       <div v-if="!isGameStart">
@@ -108,6 +108,7 @@
 
 <script>
   import {MessageBox} from 'mint-ui';
+  import nobody from '../assets/nobody.jpg';
 
   export default {
     mounted() {
@@ -161,7 +162,9 @@
         } else {
           //update score table
           this.scoreTable = data['scoreTable'];
-          this.scoreBoardVisible = true;
+          if (this.scoreTable.length !== 0) {
+            this.scoreBoardVisible = true;
+          }
           setTimeout(() => {
             this.scoreBoardVisible = false;
           }, 5000)
@@ -226,7 +229,7 @@
         this.$socket.emit('leaveroom');
       },
       setEmptyUsers() {
-        let emptyUser = {username: '空位', owner: false, avatar: 'http://placekitten.com/g/263/263'};
+        let emptyUser = {username: '空位', owner: false, avatar: nobody};
         for (let i = this.clients.length; i < 8; i++) {
           this.clients.push(emptyUser);
         }
@@ -290,9 +293,15 @@
     position: absolute;
   }
 
+  .user-card-set .user-card .user-card-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+  }
+
   .user-card-set .user-card img {
-    width: 100%;
-    height: 100%;
+    width: 70px;
+    height: 70px;
   }
 
   .game-button-div {
@@ -320,7 +329,7 @@
   }
 
   .game .msg-box {
-    height: 160px;
+    height: 170px;
     width: -webkit-fill-available;;
     overflow-y: auto;
     word-wrap: break-word;

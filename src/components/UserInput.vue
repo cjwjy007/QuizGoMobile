@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  import {MessageBox} from 'mint-ui';
   import {namelist} from '@/assets/namelist'
 
   export default {
@@ -36,8 +37,12 @@
         this.userInfo.avatar += `${id}/${id}`;
       },
       login() {
-        this.$store.dispatch('commitLogin', this.userInfo);
-        this.$router.go(-1);
+        if (this.userInfo.username && this.userInfo.username.length <= 7) {
+          this.$store.dispatch('commitLogin', this.userInfo);
+          this.$router.go(-1);
+        } else {
+          MessageBox.alert('请输入合法用户名（0-7个字符）');
+        }
       }
     }
   }
