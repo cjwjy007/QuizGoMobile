@@ -18,7 +18,7 @@
             </sup>
           </div>
           <div v-else>
-            <sup class="user-card-badge" v-if="client.score && client.score!== 0">
+            <sup class="user-card-badge" v-if="client.score !== undefined">
               <mt-badge type="primary">{{client.score}}</mt-badge>
             </sup>
           </div>
@@ -68,24 +68,30 @@
               popup-transition="popup-fade"
               :closeOnClickModal="false">
       <div>
-        <h1 class="question-time">
-          {{time}}
-        </h1>
+        <transition>
+          <h1 class="question-time" v-show="time <= 10">
+            {{time}}
+          </h1>
+        </transition>
         <p class="question-title">
-          {{question}}
+          第{{game.round}}轮:{{game.question}}
         </p>
-        <div v-for="(choice, index) in choices">
-          <div class="question-answer-cell">
-            <mt-button size="large" :type="choice.type" @click="onAnswer(choice.text,index)">
+        <transition name="fade">
+          <div :class="{visible:gameVisible,hidden:!gameVisible}">
+            <div v-for="(choice, index) in game.choices">
+              <div class="question-answer-cell">
+                <mt-button size="large" :type="choice.type" @click="onAnswer(choice.text,index)">
               <span class="question-text">
                 {{choice.text}}
               </span>
-              <div class="question-score" v-if="'score' in choice">
-                +{{choice.score}}
+                  <div class="question-score" v-if="'score' in choice">
+                    +{{choice.score}}
+                  </div>
+                </mt-button>
               </div>
-            </mt-button>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
     </mt-popup>
     <mt-popup class="score-board"
@@ -138,20 +144,21 @@
       gamestate: function (data) {
         this.isGameStart = data['isPlaying'];
         this.gameBoardVisible = false;
-        this.chosen = "";
+        this.game.chosen = "";
         if (this.isGameStart) {
           //update question board
           let question = `第${data['round']}轮：${data['question']}`;
           this.contents.push(question);
           this.refreshMsgBox();
-          this.question = data['question'];
-          this.choices = [];
+          this.game.round = data['round'];
+          this.game.question = data['question'];
+          this.game.choices = [];
           for (let c of data['choices'].split("|")) {
-            this.choices.push({text: c, type: 'default'});
+            this.game.choices.push({text: c, type: 'default'});
           }
           this.gameBoardVisible = true;
           //update timer
-          this.time = 10;
+          this.time = 13;
           clearInterval(this.timer);
           this.timer = setInterval(() => {
             this.time -= 1;
@@ -173,7 +180,7 @@
       answer: function (data) {
         // update answer color and score
         if (data['correct']) {
-          for (let c of this.choices) {
+          for (let c of this.game.choices) {
             if (c['text'] === data['answer']) {
               c['type'] = 'primary';
               c['score'] = data['score'];
@@ -181,10 +188,10 @@
             }
           }
         } else {
-          for (let c of this.choices) {
+          for (let c of this.game.choices) {
             if (c['text'] === data['answer']) {
               c['type'] = 'primary';
-            } else if (c['text'] === this.chosen) {
+            } else if (c['text'] === this.game.chosen) {
               c['type'] = 'danger';
             }
           }
@@ -208,13 +215,21 @@
         isReady: false,
         contents: [],
         gameBoardVisible: false,
-        question: "",
-        choices: [],
-        chosen: "",
-        time: 10,
+        game: {
+          round: 0,
+          question: "",
+          choices: [],
+          chosen: "",
+        },
+        time: 13,
         timer: null,
         scoreBoardVisible: false,
         scoreTable: []
+      }
+    },
+    computed: {
+      gameVisible: function () {
+        return this.time <= 10;
       }
     },
     methods: {
@@ -257,9 +272,9 @@
         });
       },
       onAnswer(answer, index) {
-        if (!this.chosen) {
+        if (!this.game.chosen) {
           this.$socket.emit('answer', {answer: answer, room: this.roomId});
-          this.chosen = answer;
+          this.game.chosen = answer;
         }
       },
       getUserInfo() {
@@ -534,5 +549,22 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
+    opacity: 0;
+  }
+
+  .visible {
+    visibility: visible;
+  }
+
+  .hidden {
+    visibility: hidden;
   }
 </style>

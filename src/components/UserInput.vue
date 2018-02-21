@@ -6,7 +6,9 @@
         <div class="user_photo horizontal_center" id="user_photo">
           <img :src="userInfo.avatar"></div>
       </div>
-      <mt-field label="用户名" placeholder="请输入用户名" v-model="userInfo.username"></mt-field>
+      <mt-field label="用户名" placeholder="请输入用户名" v-model="userInfo.username">
+        <img src="../assets/dice.png"  @click="randomUserName">
+      </mt-field>
       <div class='login-button'>
         <mt-button type="primary" size="large" @click="login">确认登录</mt-button>
       </div>
@@ -33,8 +35,10 @@
     methods: {
       getMockUser() {
         let id = Math.ceil(Math.random() * 100 + 150);
-        this.userInfo.username = namelist[Math.ceil(Math.random() * 1500)];
         this.userInfo.avatar += `${id}/${id}`;
+      },
+      randomUserName(){
+        this.userInfo.username = namelist[Math.ceil(Math.random() * 1500)];
       },
       login() {
         if (this.userInfo.username && this.userInfo.username.length <= 7) {

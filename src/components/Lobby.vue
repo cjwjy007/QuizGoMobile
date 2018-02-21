@@ -1,17 +1,22 @@
 <template>
   <div>
     <mt-header title="大厅"></mt-header>
-    <div class="user-card">
-      <div class="user-detail">
-        <div class="user_photo horizontal_center" id="user_photo">
-          <img :src="userInfo.avatar"></div>
+    <div class="page-body">
+      <div class="user-card">
+        <div class="user-detail">
+          <div class="user_photo horizontal_center" id="user_photo">
+            <img :src="userInfo.avatar"></div>
+        </div>
+        <mt-field :disableClear="true" :readonly="true" label="欢迎！" v-model="userInfo.username">
+          <mt-button size="small" @click="cleanCache">退出登录</mt-button>
+        </mt-field>
       </div>
-      <mt-field :disableClear="true" :readonly="true" label="欢迎！" v-model="userInfo.username">
-        <mt-button size="small" @click="cleanCache">退出登录</mt-button>
-      </mt-field>
-    </div>
-    <div style="margin-top: 5%">
-      <mt-button type="primary" size="large" @click="createRoom">创建房间</mt-button>
+      <div style="margin-top: 5%">
+        <mt-button type="primary" size="large" @click="createRoom">创建房间</mt-button>
+      </div>
+      <div class="lobby-bottom">
+        Tip：请大家及时将不完整的、错误的、过时的题目截图发给Gerald，谢谢大家。
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +61,7 @@
 <style scoped>
   .user-card {
     position: relative;
-    padding: 20px 0;
+    padding-top: 20px;
     width: 100%;
     background: #fff;
     border-radius: 3px;
@@ -95,4 +100,9 @@
     z-index: -1;
   }
 
+  .lobby-bottom{
+    margin-top: 20px;
+    text-align: center;
+    color: #9e9e9ea8;
+  }
 </style>
