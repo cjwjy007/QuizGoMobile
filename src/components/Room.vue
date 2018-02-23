@@ -118,6 +118,7 @@
 
   export default {
     mounted() {
+      window.location.href = window.location.href;
       this.getUserInfo();
       this.joinRoom();
     },

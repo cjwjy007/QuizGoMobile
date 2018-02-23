@@ -22,6 +22,7 @@
 
   export default {
     mounted() {
+      window.location.href = window.location.href;
       this.getMockUser();
     },
     data() {

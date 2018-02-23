@@ -26,11 +26,5 @@ new Vue({
     if (this.$store.state.auth.username === '') {
       this.$router.push({name: 'UserInput'})
     }
-  },
-  beforeEnter(to, from, next) {
-    if (from.path !== '/') {
-      router.go(to.path)
-    }
-    next()
   }
 })
